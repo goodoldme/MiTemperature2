@@ -1,8 +1,8 @@
 services:
   mitemp2:
     image: mitemp2
-    logging:
-        driver: none
+    #logging:
+    #    driver: none
     restart: unless-stopped
     container_name: mitemp2
     volumes:

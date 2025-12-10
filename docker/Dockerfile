@@ -1,5 +1,5 @@
 # Build-only intermediate image
-FROM debian:bookworm-slim AS stage0
+FROM debian:trixie-slim AS stage0
 
 # Install Debian-provided python packages instead of using pip, will
 #  reduce build time considerably
@@ -11,12 +11,12 @@ RUN apt-get update \
 		libglib2.0-dev \
 		python3-pip
 
-RUN python3 -m pip config set global.break-system-packages true
+RUN python3 -m pip config set global.break-system-packages true \
 # Wheel is required for bluepy to build properly. *MUST* run as separate calls to pip install
-RUN pip3 install --upgrade pip setuptools wheel
-RUN pip3 install bluepy
+&& python3 -m pip install --upgrade setuptools wheel \
+&& pip3 install bluepy
 
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 # Install Debian-provided python packages instead of using pip, will
 #  reduce build time considerably
@@ -27,7 +27,6 @@ RUN apt-get update \
 		python3-bluez \
 		python3-pip \
 		python3-pycryptodome \
-		python3-requests \
                 curl \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
